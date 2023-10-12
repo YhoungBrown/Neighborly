@@ -11,7 +11,7 @@ const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [imageURL, setImageURL] = useState('');
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -20,18 +20,20 @@ const RegisterScreen = ({ navigation }) => {
   }, [navigation]);
 
   const register = () => {
-    setLoading(true)
+    setLoading(true); // Set loading to true when registering
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((authUser) => {
         updateProfile(authUser.user, {
           displayName: name,
           photoURL: imageURL || 'https://toppng.com/uploads/preview/roger-berry-avatar-placeholder-11562991561rbrfzlng6h.png',
         });
-        setLoading(false)
+        setLoading(false); // Set loading to false on success
       })
-      .catch(
-        setLoading(false),
-        (error) => alert(error.message));
+      .catch((error) => {
+        setLoading(false); // Set loading to false on error
+        alert(error.message);
+      });
   };
 
   return (
@@ -55,22 +57,19 @@ const RegisterScreen = ({ navigation }) => {
         />
       </View>
 
-      {loading && (
-        <View style={{flexDirection: 'row'}}>
-        <Text>Loading...</Text>
-          <ActivityIndicator size='small' color="White"/>
+      {loading ? (
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{color: "blue"}}>Loading...</Text>
+          <ActivityIndicator size="small" color="blue" />
         </View>
-      ) } 
-      
-      {!loading && (
+      ) : (
         <Button
-        containerStyle={styles.button}
-        raised
-        title="Register"
-        onPress={register}
-      />
-      ) }
-      
+          containerStyle={styles.button}
+          raised
+          title="Register"
+          onPress={register}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 };
